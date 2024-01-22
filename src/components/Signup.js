@@ -8,16 +8,20 @@ import facebook from '../icons/facebook.png'
 import google from '../icons/search.png'
 import twitter from '../icons/twitter.png'
 import user from '../icons/user.png'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import auth from '../firebase/Config'
+
 export default function Signup () {
+  
   const [Email, setEmail] = useState('')
   const [Password, setPassword] = useState('')
   const [Username, setUsername] = useState('')
   const [DisableDoubleClick, setDisableDoubleClick] = useState(false)
   const [Type, setType] = useState('password')
   const [Visibility, setVisibility] = useState(password1)
+  const navigate = useNavigate()
+
   const show_password = event => {
     event.preventDefault()
     if (Type === 'text') {
@@ -28,6 +32,7 @@ export default function Signup () {
       setVisibility(password2)
     }
   }
+
   const handleSubmit = event => {
     event.preventDefault()
     // setEmail('')
@@ -39,9 +44,11 @@ export default function Signup () {
         setDisableDoubleClick(false)
         console.log(userCredential)
         const user = userCredential.user
+
         await updateProfile(user, {
           displayName: Username
         })
+        navigate('/login')
       })
       .catch(error => {
         setDisableDoubleClick(false)
@@ -54,6 +61,7 @@ export default function Signup () {
         // setUsername('')
       })
   }
+
   return (
     <div>
       <div className='flex flex-col justify-center items-center h-screen w-full '>
@@ -68,7 +76,7 @@ export default function Signup () {
               <input
                 value={Username}
                 onChange={e => setUsername(e.target.value)}
-                type='text' 
+                type='text'
                 className='flex-1 bg-transparent px-4 h-full text-[1.6rem] focus:outline-none '
                 placeholder='Enter Username'
                 required
